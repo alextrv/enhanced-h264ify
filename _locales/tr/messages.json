@@ -1,0 +1,35 @@
+{
+  "extensionDescription": {
+    "message": "YouTube'un sizin için hangi video çözücüyü oynatacağını seçin",
+    "description": "Extension description"
+  },
+
+  "optionsTitle": {
+    "message": "enhanced-h264ify"
+  },
+
+  "optionsBlock60fps": {
+    "message": "60fps videoyu engelle"
+  },
+
+  "optionsBlockH264": {
+    "message": "h264 videoyu engelle"
+  },
+
+  "optionsBlockVP8": {
+    "message": "VP8 videoyu engelle"
+  },
+
+  "optionsBlockVP9": {
+    "message": "VP9 videoyu engelle"
+  },
+
+  "optionsBlockAV1": {
+    "message": "AV1 videoyu engelle"
+  },
+
+  "optionsDisableLN": {
+    "message": "Ses Normalleştirmeyi Devre Dışı Bırak"
+  }
+
+}
