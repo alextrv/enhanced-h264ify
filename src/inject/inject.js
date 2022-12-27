@@ -24,21 +24,16 @@
  */
 
 function inject () {
-
-  override();
-
   function override() {
     // Override video element canPlayType() function
-    var videoElem = document.createElement('video');
-    var origCanPlayType = videoElem.canPlayType.bind(videoElem);
-    videoElem.__proto__.canPlayType = makeModifiedTypeChecker(origCanPlayType);
+    HTMLVideoElement.prototype.canPlayType = makeModifiedTypeChecker(HTMLVideoElement.prototype.canPlayType);
 
     // Override media source extension isTypeSupported() function
     var mse = window.MediaSource;
     // Check for MSE support before use
-    if (mse === undefined) return;
-    var origIsTypeSupported = mse.isTypeSupported.bind(mse);
-    mse.isTypeSupported = makeModifiedTypeChecker(origIsTypeSupported);
+    if (typeof mse === 'function') {
+      mse.isTypeSupported = makeModifiedTypeChecker(mse.isTypeSupported);
+    }
   }
 
   // return a custom MIME type checker that can defer to the original function
@@ -46,23 +41,21 @@ function inject () {
     // Check if a video type is allowed
     return function (type) {
       if (type === undefined) return '';
-      var disallowed_types = [];
-      if (localStorage['enhanced-h264ify-block_h264'] === 'true') {
-        disallowed_types.push('avc');
-      }
-      if (localStorage['enhanced-h264ify-block_vp8'] === 'true') {
-        disallowed_types.push('vp8');
-      }
-      if (localStorage['enhanced-h264ify-block_vp9'] === 'true') {
-        disallowed_types.push('vp9', 'vp09');
-      }
-      if (localStorage['enhanced-h264ify-block_av1'] === 'true') {
-        disallowed_types.push('av01');
-      }
+      // var disallowed_types = [];
 
       // If video type is in disallowed_types, say we don't support them
-      for (var i = 0; i < disallowed_types.length; i++) {
-        if (type.indexOf(disallowed_types[i]) !== -1) return '';
+      if (localStorage['enhanced-h264ify-block_h264'] === 'true') {
+        if (type.indexOf('avc') >= 0) return '';
+      }
+      if (localStorage['enhanced-h264ify-block_vp8'] === 'true') {
+        if (type.indexOf('vp8') >= 0) return '';
+      }
+      if (localStorage['enhanced-h264ify-block_vp9'] === 'true') {
+        if (type.indexOf('vp9') >= 0) return '';
+        if (type.indexOf('vp09') >= 0) return '';
+      }
+      if (localStorage['enhanced-h264ify-block_av1'] === 'true') {
+        if (type.indexOf('av01') >= 0) return '';
       }
 
       if (localStorage['enhanced-h264ify-block_60fps'] === 'true') {
@@ -71,9 +64,11 @@ function inject () {
       }
 
       // Otherwise, ask the browser
-      return origChecker(type);
+      return origChecker.call(this, type);
     };
   }
+
+  override();
 }
 
 function useActualVolumeLevel() {
