@@ -10,6 +10,35 @@
         body {
         white-space:nowrap;
         }
+        li {
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+        input[type="checkbox"] {
+          display: none;
+        }
+        label {
+          position: relative;
+          cursor: pointer;
+          padding-left: 30px;
+        }
+        label::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 20px;
+          height: 20px;
+          border-radius: 10px;
+          border: 1px solid lightgray;
+          background-color: white;
+        }
+        input[type="checkbox"]:checked + label::before {
+          border: 1px solid lightgreen;
+          background-color: lightgreen;
+        }
       </style>
    </head>
    <body>
