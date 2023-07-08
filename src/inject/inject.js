@@ -76,8 +76,6 @@ function inject () {
         const match = /codecs="(.*)"/.exec(type);
         const codecs = match && match[1] ? match && match[1] : '';
 
-        console.log(codecs);
-
         const HDRTransferCharacteristics = [
           '16', // SMPTE ST 2084 Perceptual Quantizer
           '18' // BT.2100 Hybrid Log Gamma 
@@ -97,19 +95,6 @@ function inject () {
             videoFullRangeFlag
           ] = codecs.split('.');
 
-          Object.entries({
-            fourCharacterCode,
-            profile,
-            level,
-            bitDepth,
-            monochrome,
-            chromaSubsampling,
-            colorPrimaries,
-            transferCharacteristics,
-            matrixCoefficients,
-            videoFullRangeFlag
-          }).forEach((entries) => console.log('-', ...entries));
-
           if (HDRTransferCharacteristics.includes(transferCharacteristics)) return '';
 
         } else if (/^vp\d\d/.test(codecs)) {
@@ -124,18 +109,6 @@ function inject () {
             matrixCoefficients,
             videoFullRangeFlag
           ] = codecs.split('.');
-
-          Object.entries({
-            fourCharacterCode,
-            profile,
-            level,
-            bitDepth,
-            chromaSubsampling,
-            colorPrimaries,
-            transferCharacteristics,
-            matrixCoefficients,
-            videoFullRangeFlag,
-          }).forEach((entries) => console.log('-', ...entries));
 
           if (HDRTransferCharacteristics.includes(transferCharacteristics)) return '';
         }
