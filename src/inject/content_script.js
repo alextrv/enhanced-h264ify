@@ -31,6 +31,9 @@
 if (localStorage['enhanced-h264ify-block_60fps'] === undefined) {
   localStorage['enhanced-h264ify-block_60fps'] = false;
 }
+if (localStorage['enhanced-h264ify-block_HDR'] === undefined) {
+  localStorage['enhanced-h264ify-block_HDR'] = false;
+}
 if (localStorage['enhanced-h264ify-block_h264'] === undefined) {
   localStorage['enhanced-h264ify-block_h264'] = false;
 }
@@ -54,6 +57,7 @@ if (localStorage['enhanced-h264ify-disable_LN'] === undefined) {
 chrome.storage.local.get({
   // Set defaults
   block_60fps: false,
+  block_HDR: false,
   block_h264: false,
   block_vp8: true,
   block_vp9: true,
@@ -61,6 +65,7 @@ chrome.storage.local.get({
   disable_LN: false
  }, function(options) {
    localStorage['enhanced-h264ify-block_60fps'] = options.block_60fps;
+   localStorage['enhanced-h264ify-block_HDR'] = options.block_HDR;
    localStorage['enhanced-h264ify-block_h264'] = options.block_h264;
    localStorage['enhanced-h264ify-block_vp8'] = options.block_vp8;
    localStorage['enhanced-h264ify-block_vp9'] = options.block_vp9;
