@@ -52,5 +52,5 @@ for (var i = 0; i < checkboxes.length; i++) {
 
 // l10n
 for (let element of document.querySelectorAll('[data-l10n-id]')) {
-  element.textContent = chrome.i18n.getMessage(element.dataset.l10nId);
+  element.textContent = chrome.i18n.getMessage(element.dataset.l10nId) || element.dataset.l10nId;
 }
