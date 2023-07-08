@@ -70,6 +70,50 @@ function inject () {
         if (match && match[1] > 30) return '';
       }
 
+      if (localStorage['enhanced-h264ify-block_HDR'] === 'true') {
+        // parse AV1 and VP8/VP9 format strings
+        // see https://developer.mozilla.org/en-US/docs/Web/Media/Formats/codecs_parameter
+        const match = /codecs="(.*)"/.exec(type);
+        const codecs = match && match[1] ? match && match[1] : '';
+
+        const HDRTransferCharacteristics = [
+          '16', // SMPTE ST 2084 Perceptual Quantizer
+          '18' // BT.2100 Hybrid Log Gamma 
+        ];
+
+        if (/^av01/.test(codecs)) {
+          const [
+            fourCharacterCode,
+            profile,
+            level,
+            bitDepth,
+            monochrome,
+            chromaSubsampling,
+            colorPrimaries,
+            transferCharacteristics,
+            matrixCoefficients,
+            videoFullRangeFlag
+          ] = codecs.split('.');
+
+          if (HDRTransferCharacteristics.includes(transferCharacteristics)) return '';
+
+        } else if (/^vp\d\d/.test(codecs)) {
+          const [
+            fourCharacterCode,
+            profile,
+            level,
+            bitDepth,
+            chromaSubsampling,
+            colorPrimaries,
+            transferCharacteristics,
+            matrixCoefficients,
+            videoFullRangeFlag
+          ] = codecs.split('.');
+
+          if (HDRTransferCharacteristics.includes(transferCharacteristics)) return '';
+        }
+      }
+
       // Otherwise, ask the browser
       return origChecker(type);
     };

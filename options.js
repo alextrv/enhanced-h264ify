@@ -1,6 +1,7 @@
 // Saves options to chrome.storage
 function save_options() {
   var block_60fps = document.getElementById('block_60fps').checked;
+  var block_HDR = document.getElementById('block_HDR').checked;
   var block_h264 = document.getElementById('block_h264').checked;
   var block_vp8 = document.getElementById('block_vp8').checked;
   var block_vp9 = document.getElementById('block_vp9').checked;
@@ -9,6 +10,7 @@ function save_options() {
   var disable_LN = document.getElementById('disable_LN').checked;
   chrome.storage.local.set({
     block_60fps: block_60fps,
+    block_HDR: block_HDR,
     block_h264: block_h264,
     block_vp8: block_vp8,
     block_vp9: block_vp9,
@@ -22,6 +24,7 @@ function restore_options() {
   // Default values
   chrome.storage.local.get({
     block_60fps: false,
+    block_HDR: false,
     block_h264: false,
     block_vp8: true,
     block_vp9: true,
@@ -29,6 +32,7 @@ function restore_options() {
     disable_LN: false
   }, function(options) {
     document.getElementById('block_60fps').checked = options.block_60fps;
+    document.getElementById('block_HDR').checked = options.block_HDR;
     document.getElementById('block_h264').checked = options.block_h264;
     document.getElementById('block_vp8').checked = options.block_vp8;
     document.getElementById('block_vp9').checked = options.block_vp9;
@@ -48,5 +52,5 @@ for (var i = 0; i < checkboxes.length; i++) {
 
 // l10n
 for (let element of document.querySelectorAll('[data-l10n-id]')) {
-  element.textContent = chrome.i18n.getMessage(element.dataset.l10nId);
+  element.textContent = chrome.i18n.getMessage(element.dataset.l10nId) || element.dataset.l10nId;
 }

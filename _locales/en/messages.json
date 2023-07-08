@@ -12,6 +12,10 @@
     "message": "Block 60fps video"
   },
 
+  "optionsBlockHDR": {
+    "message": "Block HDR video"
+  },
+
   "optionsBlockH264": {
     "message": "Block h264"
   },
