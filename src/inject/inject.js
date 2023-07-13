@@ -67,7 +67,7 @@ function inject () {
 
       if (localStorage['enhanced-h264ify-block_60fps'] === 'true') {
         var match = /framerate=(\d+)/.exec(type);
-        if (match && match[1] > 30) return '';
+        if (match && match[1] >= 48) return '';
       }
 
       // Otherwise, ask the browser
