@@ -1,0 +1,50 @@
+{
+  "extensionDescription": {
+    "message": "Choisissez les codecs vidéo et audio que YouTube doit lire pour vous",
+    "description": "Extension description"
+  },
+
+  "optionsTitle": {
+    "message": "enhanced-h264ify"
+  },
+
+  "optionsBlock60fps": {
+    "message": "Bloquer les vidéos en 60 fps"
+  },
+
+  "optionsBlockH264": {
+    "message": "Bloquer h264 (AVC)"
+  },
+
+  "optionsBlockVP8": {
+    "message": "Bloquer VP8"
+  },
+
+  "optionsBlockVP9": {
+    "message": "Bloquer VP9"
+  },
+
+  "optionsBlockAV1": {
+    "message": "Bloquer AV1"
+  },
+
+  "optionsBlockOpus": {
+    "message": "Bloquer Opus"
+  },
+
+  "optionsBlockMP4A": {
+    "message": "Bloquer AAC (MP4A)"
+  },
+
+  "optionsDisableLN": {
+    "message": "Désactiver la normalisation du volume sonore"
+  },
+
+  "optionsTitleVideo": {
+    "message": "Vidéo"
+  },
+
+  "optionsTitleAudio": {
+    "message": "Audio"
+  }
+}
