@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title data-i18n="optionsTitle">enhanced-h264ify Audit Harness</title>
+   <link rel="stylesheet" href="src/options/options.css">
+   <style>
+     body {
+       width: 820px;
+       max-width: 95vw;
+       margin: 20px auto;
+       user-select: auto;
+     }
+     .harness-dashboard {
+       border: 1px solid var(--border);
+       border-radius: 12px;
+       background: var(--surface);
+       padding: 18px;
+       margin-bottom: 20px;
+     }
+     .harness-badge {
+       display: inline-block;
+       padding: 5px 12px;
+       border-radius: 999px;
+       font-weight: 700;
+       font-size: 13px;
+     }
+     .badge-pass { background: #137333; color: #fff; }
+     .badge-fail { background: #c5221f; color: #fff; }
+     .badge-running { background: #e37400; color: #fff; }
+     .results-table {
+       margin-top: 14px;
+       border-collapse: collapse;
+       width: 100%;
+       font-size: 12.5px;
+     }
+     .results-table td, .results-table th {
+       padding: 8px 10px;
+       border-bottom: 1px solid var(--border);
+       text-align: left;
+     }
+     .results-table tr.pass td:first-child { color: #137333; font-weight: 600; }
+     .results-table tr.fail td:first-child { color: #c5221f; font-weight: 700; background: #fce8e6; }
+     .fixture-section {
+       border-top: 2px dashed var(--border);
+       padding-top: 20px;
+       margin-top: 30px;
+     }
+   </style>
+</head>
+<body>
+   <header>
+      <h1 data-i18n="optionsTitle">enhanced-h264ify — Suite de Auditoría y Verificación</h1>
+      <p style="color:var(--muted); font-size:12px; margin:4px 0 16px;">
+        Verificación estática en navegador (Cero dependencias externas, Cero Node, Manifest V3 nativo).
+      </p>
+   </header>
+
+   <section class="harness-dashboard">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span id="harness-badge" class="harness-badge badge-running">EJECUTANDO PRUEBAS...</span>
+          <span id="harness-summary" style="margin-left:12px; font-weight:600;">Iniciando arnés...</span>
+        </div>
+        <button type="button" onclick="location.reload()" style="padding:6px 14px; border-radius:6px; border:1px solid var(--border); background:var(--bg); cursor:pointer;">
+          Re-ejecutar pruebas
+        </button>
+      </div>
+
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th style="width:90px;">Estado</th>
+            <th>Descripción de la prueba</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody id="results-body"></tbody>
+      </table>
+   </section>
+
+   <section class="fixture-section">
+      <h2 style="font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">
+        Interfaz de Opciones (Fixture en Vivo)
+      </h2>
+      <main>
+         <section class="card">
+            <h2 data-i18n="optionsTitleVideo">Video</h2>
+            <ul id="group-video"></ul>
+         </section>
+         <section class="card">
+            <h2 data-i18n="optionsTitleAudio">Audio</h2>
+            <ul id="group-audio"></ul>
+         </section>
+         <section class="card">
+            <h2 data-i18n="optionsTitlePlayback">Playback</h2>
+            <ul id="group-playback"></ul>
+         </section>
+         <section class="card">
+            <h2 data-i18n="optionsTitleInterface">Interface</h2>
+            <ul id="group-interface"></ul>
+         </section>
+      </main>
+      <footer>
+         <p class="credit" data-i18n="attribution"></p>
+      </footer>
+   </section>
+
+   <!-- Carga de módulos de la extensión -->
+   <script src=".harness-mock.js"></script>
+   <script src="src/common/config.js"></script>
+   <script src="src/content/bridge.js"></script>
+   <script src="src/content/codec-guard.js"></script>
+   <script src="src/content/loudness.js"></script>
+   <script src="src/content/playback.js"></script>
+   <script src="src/content/player-control.js"></script>
+   <script src="src/content/dislikes.js"></script>
+   <script src="src/options/options.js"></script>
+   <script src=".harness-tests.js"></script>
+
+   <script>
+     const monitorResults = () => {
+       if (!globalThis.__DONE__) {
+         setTimeout(monitorResults, 40);
+         return;
+       }
+       const badge = document.getElementById('harness-badge');
+       const summary = document.getElementById('harness-summary');
+       const tbody = document.getElementById('results-body');
+       const results = globalThis.__RESULTS__ || [];
+
+       tbody.innerHTML = '';
+       let pass = 0;
+       let fail = 0;
+
+       for (const res of results) {
+         const parts = res.split(' | ');
+         const status = parts[0];
+         const name = parts[1] || '';
+         const detail = parts[2] || '';
+         const isPass = status === 'PASS';
+         if (isPass) pass++; else fail++;
+
+         const tr = document.createElement('tr');
+         tr.className = isPass ? 'pass' : 'fail';
+         tr.innerHTML = `<td>[${status}]</td><td>${name}</td><td style="color:var(--muted); font-size:11.5px;">${detail}</td>`;
+         tbody.appendChild(tr);
+       }
+
+       if (fail === 0) {
+         badge.className = 'harness-badge badge-pass';
+         badge.textContent = '100% PRUEBAS PASADAS';
+       } else {
+         badge.className = 'harness-badge badge-fail';
+         badge.textContent = `${fail} FALLARON`;
+       }
+       summary.textContent = `${pass} pasadas de ${results.length} pruebas totales (${fail} errores).`;
+     };
+     monitorResults();
+   </script>
+</body>
+</html>

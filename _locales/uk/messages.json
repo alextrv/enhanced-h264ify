@@ -1,61 +1,22 @@
 {
-  "extensionDescription": {
-    "message": "Вибирайте самі відео та аудіо кодеки, які YouTube буде вам показувати",
-    "description": "Extension description"
-  },
-
-  "optionsTitle": {
-    "message": "enhanced-h264ify"
-  },
-
-  "optionsBlock60fps": {
-    "message": "Блокувати 60к/с відео"
-  },
-
-  "optionsBlockH264": {
-    "message": "Блокувати h264 (AVC)"
-  },
-
-  "optionsBlockVP8": {
-    "message": "Блокувати VP8"
-  },
-
-  "optionsBlockVP9": {
-    "message": "Блокувати VP9"
-  },
-
-  "optionsBlockAV1": {
-    "message": "Блокувати AV1"
-  },
-
-  "optionsBlockOpus": {
-    "message": "Блокувати Opus"
-  },
-
-  "optionsBlockMP4A": {
-    "message": "Блокувати AAC (MP4A)"
-  },
-
-  "optionsDisableLN": {
-    "message": "Вимкнути нормалізацію гучності"
-  },
-
-  "optionsTitleVideo": {
-    "message": "Відео"
-  },
-
-  "optionsTitleAudio": {
-    "message": "Аудіо"
-  },
-
-  "attributionUpstream": {
-    "message": "На основі h264ify від erkserkserks (2015) та enhanced-h264ify від alextrv (2019)",
-    "description": "Upstream authors, listed before the current maintainer"
-  },
-
-  "attribution": {
-    "message": "Змінено та покращено: LiebeBlack",
-    "description": "Credit line shown in the popup footer"
-  }
-
+  "extensionDescription": { "message": "Обирайте кодеки, які YouTube буде відтворювати", "description": "Extension description" },
+  "optionsTitlePlayback": { "message": "Відтворення" },
+  "optionsAutoMaxResolution": { "message": "Максимальна роздільність на старті" },
+  "optionsAntiInactivity": { "message": "Пропускати паузу неактивності" },
+  "optionsBypassAgeGate": { "message": "Пропускати попередження про вміст і вік" },
+  "optionsTitleInterface": { "message": "Інтерфейс" },
+  "optionsShowDislikes": { "message": "Показувати «Не подобається»" },
+  "optionsTitle": { "message": "enhanced-h264ify" },
+  "optionsBlock60fps": { "message": "Блокувати 60 кадрів/с" },
+  "optionsBlockH264": { "message": "Блокувати H.264 (AVC)" },
+  "optionsBlockVP8": { "message": "Блокувати VP8" },
+  "optionsBlockVP9": { "message": "Блокувати VP9" },
+  "optionsBlockAV1": { "message": "Блокувати AV1" },
+  "optionsBlockOpus": { "message": "Блокувати Opus" },
+  "optionsBlockMP4A": { "message": "Блокувати AAC (MP4A)" },
+  "optionsDisableLN": { "message": "Вимкнути нормалізацію звуку" },
+  "optionsTitleVideo": { "message": "Відео" },
+  "optionsTitleAudio": { "message": "Аудіо" },
+  "attributionUpstream": { "message": "enhanced-h264ify (erkserkserks, alextrv, LiebeBlack)", "description": "Upstream authors" },
+  "attribution": { "message": "enhanced-h264ify · LiebeBlack", "description": "Credit line shown in the popup footer" }
 }

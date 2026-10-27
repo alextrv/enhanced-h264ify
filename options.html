@@ -1,31 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
    <!-- Modified and improved by LiebeBlack -->
    <head>
       <meta charset="utf-8">
-      <title data-i18n="optionsTitle"></title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title data-i18n="optionsTitle">enhanced-h264ify</title>
       <link rel="stylesheet" href="src/options/options.css">
    </head>
    <body>
-      <header>
-         <h1 data-i18n="optionsTitle"></h1>
-         <p class="tagline" data-i18n="extensionDescription"></p>
-      </header>
       <main>
          <section class="card">
-            <h2 data-i18n="optionsTitleVideo"></h2>
+            <h2 data-i18n="optionsTitleVideo">Video</h2>
             <ul id="group-video"></ul>
          </section>
          <section class="card">
-            <h2 data-i18n="optionsTitleAudio"></h2>
+            <h2 data-i18n="optionsTitleAudio">Audio</h2>
             <ul id="group-audio"></ul>
+         </section>
+         <section class="card">
+            <h2 data-i18n="optionsTitlePlayback">Reproducción</h2>
+            <ul id="group-playback"></ul>
+         </section>
+         <section class="card">
+            <h2 data-i18n="optionsTitleInterface">Interfaz</h2>
+            <ul id="group-interface"></ul>
          </section>
       </main>
       <footer>
-         <p class="credit" data-i18n="attributionUpstream"></p>
-         <p data-i18n="attribution"></p>
+         <p class="credit" data-i18n="attribution"></p>
       </footer>
       <script src="src/common/config.js"></script>
-      <script type="module" src="src/options/options.js"></script>
+      <script src="src/options/options.js"></script>
    </body>
 </html>

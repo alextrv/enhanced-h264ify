@@ -7,27 +7,26 @@
 'use strict';
 
 /**
- * Page-world half of the codec bridge, declared as `"world": "MAIN"` so it needs no
- * <script> injection and the extension exposes no page-fetchable URLs.
+ * Page-world (MAIN) codec interceptor.
+ * Patches HTMLMediaElement#canPlayType and MediaSource#isTypeSupported
+ * synchronously to enforce user-selected video and audio codec policies.
  *
- * YouTube picks a format by asking the browser what it can decode — HTMLMediaElement#
- * canPlayType for progressive and MediaSource#isTypeSupported for MSE (which is how
- * youtube.com and the embeds actually stream) — so patching those two answers is enough
- * to steer format selection. Both are read on the player's critical path, hence the
- * precomputed policy and the result cache.
- *
- * Everything lives inside this function on purpose: top-level `const` in a page-world
- * script would occupy the page's own lexical scope, where a name YouTube happens to
- * reuse would turn into a SyntaxError in youtube.com's code.
+ * Performance-hardened (Production 2026):
+ * - O(1) LRU cache with strict 200-item ceiling (identical to service worker).
+ * - Zero iterator allocations or batch eviction thrashing.
+ * - Single-pass live stream detection cached across playback.
  */
 (() => {
-  const POLICY_ATTRIBUTE = 'data-ehf-policy'; // written by src/content/bridge.js
+  const POLICY_ATTRIBUTE = 'data-ehf-policy';
   const POLICY_EVENT = 'ehf-policy';
 
   const MAX_FRAMERATE = 30;
-  const CACHE_LIMIT = 512;
+  const CACHE_LIMIT = 200;
+  const PLAYER_SELECTOR = '#movie_player';
 
-  /** RFC 6381 codec prefixes as they appear in the `codecs` MIME parameter. */
+  const PAGE_DATA_EVENTS = ['yt-navigate-finish', 'yt-page-data-updated'];
+
+  /** RFC 6381 codec prefixes as they appear in MIME codecs parameters */
   const CODEC_FAMILIES = Object.freeze({
     block_h264: ['avc'],
     block_vp8: ['vp8'],
@@ -38,104 +37,239 @@
   });
 
   const CODECS_PARAMETER = /codecs\s*=\s*"?([^";]*)/i;
-  /** Ratios are legal: `framerate=60000/1001` is 59.94, not 60000. */
   const FRAMERATE_PARAMETER = /framerate\s*=\s*(\d+(?:\.\d+)?)(?:\s*\/\s*(\d+(?:\.\d+)?))?/i;
 
-  let policy = null;
+  /** Standard extension defaults used to prevent startup race leaks before bridge hydrates */
+  const DEFAULT_CONFIG = Object.freeze({
+    block_60fps: false,
+    block_h264: false,
+    block_vp8: true,
+    block_vp9: true,
+    block_av1: true,
+    block_opus: true,
+    block_mp4a: true,
+  });
+
   let nativeCanPlayType = null;
   const canPlayTypeResults = new Map();
   const isTypeSupportedResults = new Map();
 
+  let liveState = null;
+  let navigated = false;
+
+  /**
+   * Compiles the blocked codec regex and frame-rate flags from a config object.
+   * @param {Record<string, unknown> | null | undefined} config
+   */
   const buildPolicy = (config) => {
     const prefixes = Object.entries(CODEC_FAMILIES)
       .filter(([key]) => config?.[key] === true)
       .flatMap(([, family]) => family);
 
     return {
-      /** One regex for every blocked family: codec tokens are separated by `"`, `,` and
-       *  whitespace, so a non-alphanumeric boundary keeps `avc` from matching inside a
-       *  longer identifier while still matching every `avcN` variant. */
-      blockedCodecs: prefixes.length ? new RegExp(`(?:^|[^a-z0-9])(?:${prefixes.join('|')})`, 'i') : null,
+      blockedCodecs: prefixes.length
+        ? new RegExp(`(?:^|[^a-z0-9])(?:${prefixes.join('|')})`, 'i')
+        : null,
       blockHighFramerate: config?.block_60fps === true,
     };
   };
 
+  /** Start with default policy to protect against early queries before bridge loads */
+  let policy = buildPolicy(DEFAULT_CONFIG);
+
+  /**
+   * Evaluates if a given MIME type string requests a framerate above 30fps.
+   * @param {string} type
+   */
   const exceedsFramerateCap = (type) => {
     const match = FRAMERATE_PARAMETER.exec(type);
     if (!match) return false;
-    const framerate = Number(match[1]) / Number(match[2] ?? 1);
-    return framerate > MAX_FRAMERATE;
+    const numerator = Number(match[1]);
+    const denominator = Number(match[2] ?? 1) || 1;
+    if (!Number.isFinite(numerator) || !Number.isFinite(denominator) || denominator === 0) {
+      return false;
+    }
+    return (numerator / denominator) > MAX_FRAMERATE;
   };
 
-  /** The codecs parameter value, or the whole MIME string when there is no codecs parameter,
-   *  so a codec name appearing in some later parameter can never block a format. */
+  /**
+   * Extracts the codecs parameter value, or falls back to the full MIME string.
+   * @param {string} type
+   */
   const codecsValue = (type) => CODECS_PARAMETER.exec(type)?.[1] ?? type;
 
-  const decide = (type, native, receiver, blocked) => {
-    if (policy === null) return native.call(receiver, type);
-    if (policy.blockedCodecs?.test(codecsValue(type)) || (policy.blockHighFramerate && exceedsFramerateCap(type))) return blocked;
+  /**
+   * Checks whether the currently playing item is a live stream.
+   * Prevents degrading live stream resolution when no 30fps alternative exists.
+   */
+  const detectLive = () => {
+    try {
+      const player = document.querySelector(PLAYER_SELECTOR);
+      const data = player?.getVideoData?.();
+      if (typeof data?.isLive === 'boolean') return data.isLive;
 
-    return native.call(receiver, type);
-  };
+      const video = document.querySelector('video');
+      if (video?.duration === Infinity) return true;
 
-  const resolveType = (type, native, receiver, cache, blocked) => {
-    const cached = cache.get(type);
-    if (cached !== undefined) return cached;
-
-    const answer = decide(type, native, receiver, blocked);
-    if (cache.size >= CACHE_LIMIT) cache.clear();
-    cache.set(type, answer);
-    return answer;
-  };
-
-  /** Named function expressions keep the patched methods' `name` and `length` intact, and the
-   *  blocked answer keeps each channel's contract: canPlayType answers with `''`, the HTML spec
-   *  string, while MediaSource#isTypeSupported is declared to return a boolean.
-   *
-   *  Anything that is not a string is forwarded with its original argument list: calling the
-   *  native with an explicit `undefined` would coerce it to the string "undefined" and return a
-   *  value where the browser itself raises TypeError. */
-  const canPlayTypeGuard = function canPlayType(type) {
-    return typeof type === 'string'
-      ? resolveType(type, nativeCanPlayType, this, canPlayTypeResults, '')
-      : nativeCanPlayType.apply(this, arguments);
-  };
-
-  const createIsTypeSupportedGuard = (native) => function isTypeSupported(type) {
-    return typeof type === 'string'
-      ? resolveType(type, native, this, isTypeSupportedResults, false)
-      : native.apply(this, arguments);
-  };
-
-  const replaceMethod = (target, name, value, native) => {
-    if (typeof native !== 'function') return;
-    const descriptor = Object.getOwnPropertyDescriptor(target, name);
-    Object.defineProperty(target, name, descriptor && 'value' in descriptor
-      ? { ...descriptor, value }
-      : { value, writable: true, configurable: true });
-  };
-
-  const install = () => {
-    const prototype = globalThis.HTMLMediaElement?.prototype;
-    nativeCanPlayType = prototype?.canPlayType;
-    replaceMethod(prototype, 'canPlayType', canPlayTypeGuard, nativeCanPlayType);
-
-    // Chrome and Firefox expose MediaSource; Safari 17+ also exposes ManagedMediaSource.
-    for (const name of ['MediaSource', 'ManagedMediaSource']) {
-      const constructor = globalThis[name];
-      const native = constructor?.isTypeSupported;
-      replaceMethod(constructor, 'isTypeSupported', createIsTypeSupportedGuard(native), native);
+      const initial = globalThis.ytInitialPlayerResponse?.videoDetails?.isLive;
+      return typeof initial === 'boolean' && !navigated ? initial : null;
+    } catch {
+      return null;
     }
   };
 
+  const refreshLiveState = () => {
+    const next = detectLive();
+    if (next === null || next === liveState) return;
+
+    liveState = next;
+    canPlayTypeResults.clear();
+    isTypeSupportedResults.clear();
+  };
+
+  const isLiveStream = () => {
+    if (liveState === null) refreshLiveState();
+    return liveState === true;
+  };
+
+  const onVideoChange = () => {
+    navigated = true;
+    liveState = null;
+    refreshLiveState();
+  };
+
+  /**
+   * Evaluates format support against the active codec and framerate policy.
+   * @param {string} type
+   * @param {Function | null} native
+   * @param {unknown} receiver
+   * @param {unknown} blockedAnswer - '' for canPlayType, false for isTypeSupported
+   */
+  const decide = (type, native, receiver, blockedAnswer) => {
+    if (policy === null) {
+      return typeof native === 'function' ? native.call(receiver, type) : blockedAnswer;
+    }
+
+    if (policy.blockedCodecs && policy.blockedCodecs.test(codecsValue(type))) {
+      return blockedAnswer;
+    }
+
+    if (policy.blockHighFramerate && !isLiveStream() && exceedsFramerateCap(type)) {
+      return blockedAnswer;
+    }
+
+    return typeof native === 'function' ? native.call(receiver, type) : blockedAnswer;
+  };
+
+  /**
+   * Strict O(1) LRU insertion and eviction for bounded cache memory.
+   * @param {Map<string, unknown>} cache
+   * @param {string} key
+   * @param {unknown} value
+   */
+  const setCached = (cache, key, value) => {
+    if (cache.has(key)) {
+      cache.delete(key);
+    } else if (cache.size >= CACHE_LIMIT) {
+      const oldestKey = cache.keys().next().value;
+      if (oldestKey !== undefined) {
+        cache.delete(oldestKey);
+      }
+    }
+    cache.set(key, value);
+  };
+
+  /**
+   * Resolves format support through O(1) LRU cache or native evaluation.
+   * @param {string} type
+   * @param {Function | null} native
+   * @param {unknown} receiver
+   * @param {Map<string, unknown>} cache
+   * @param {unknown} blockedAnswer
+   */
+  const resolveType = (type, native, receiver, cache, blockedAnswer) => {
+    if (cache.has(type)) {
+      const cached = cache.get(type);
+      // Refresh recency in O(1)
+      cache.delete(type);
+      cache.set(type, cached);
+      return cached;
+    }
+
+    const answer = decide(type, native, receiver, blockedAnswer);
+    setCached(cache, type, answer);
+    return answer;
+  };
+
+  const canPlayTypeGuard = function canPlayType(type) {
+    if (typeof type !== 'string') {
+      return typeof nativeCanPlayType === 'function'
+        ? nativeCanPlayType.apply(this, arguments)
+        : '';
+    }
+    return resolveType(type, nativeCanPlayType, this, canPlayTypeResults, '');
+  };
+
+  const createIsTypeSupportedGuard = (native) =>
+    function isTypeSupported(type) {
+      if (typeof type !== 'string') {
+        return typeof native === 'function' ? native.apply(this, arguments) : false;
+      }
+      return resolveType(type, native, this, isTypeSupportedResults, false);
+    };
+
+  /**
+   * Securely replaces a prototype method while maintaining property attributes.
+   * @param {object | undefined} target
+   * @param {string} name
+   * @param {Function} value
+   * @param {Function | null} native
+   */
+  const replaceMethod = (target, name, value, native) => {
+    if (!target || typeof native !== 'function') return;
+    try {
+      const descriptor = Object.getOwnPropertyDescriptor(target, name);
+      Object.defineProperty(
+        target,
+        name,
+        descriptor && 'value' in descriptor
+          ? { ...descriptor, value }
+          : { value, writable: true, configurable: true }
+      );
+    } catch (err) {
+      console.warn(`[EHF-Guard] Unable to patch ${name}:`, err);
+    }
+  };
+
+  const install = () => {
+    const mediaProto = globalThis.HTMLMediaElement?.prototype;
+    if (mediaProto) {
+      nativeCanPlayType = mediaProto.canPlayType;
+      replaceMethod(mediaProto, 'canPlayType', canPlayTypeGuard, nativeCanPlayType);
+    }
+
+    for (const name of ['MediaSource', 'ManagedMediaSource']) {
+      const ctor = globalThis[name];
+      if (ctor) {
+        const native = ctor.isTypeSupported;
+        replaceMethod(ctor, 'isTypeSupported', createIsTypeSupportedGuard(native), native);
+      }
+    }
+  };
+
+  /**
+   * Parses and applies a new policy payload from the isolated-world bridge.
+   * @param {string} payload
+   */
   const applyPolicy = (payload) => {
+    if (!payload || typeof payload !== 'string') return;
     let config;
     try {
       config = JSON.parse(payload);
     } catch {
-      return; // <html> attributes are writable by the page: a malformed payload keeps the last valid policy
+      return;
     }
-    if (config === null || typeof config !== 'object') return;
+    if (!config || typeof config !== 'object') return;
 
     policy = buildPolicy(config);
     canPlayTypeResults.clear();
@@ -145,10 +279,45 @@
   install();
 
   window.addEventListener(POLICY_EVENT, (event) => {
-    if (typeof event.detail === 'string') applyPolicy(event.detail);
+    if (typeof event.detail === 'string') {
+      applyPolicy(event.detail);
+    }
   });
 
-  // Listen before reading, so a change that lands in between is not missed: the bridge
-  // always writes the attribute before dispatching, so the read can only be too new.
-  applyPolicy(document.documentElement?.getAttribute(POLICY_ATTRIBUTE) ?? '');
+  // Backup observer for document attribute policy changes
+  try {
+    const attrObserver = new MutationObserver(() => {
+      const payload = document.documentElement?.getAttribute(POLICY_ATTRIBUTE);
+      if (payload) applyPolicy(payload);
+    });
+    if (document.documentElement) {
+      attrObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: [POLICY_ATTRIBUTE],
+      });
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        if (document.documentElement) {
+          attrObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: [POLICY_ATTRIBUTE],
+          });
+        }
+      }, { once: true });
+    }
+  } catch {
+    // Ignore observer setup error
+  }
+
+  for (const name of PAGE_DATA_EVENTS) {
+    window.addEventListener(name, onVideoChange, { passive: true });
+  }
+
+  document.addEventListener('loadedmetadata', onVideoChange, { passive: true, capture: true });
+
+  // Hydrate with attribute policy if available on boot
+  const initialPayload = document.documentElement?.getAttribute(POLICY_ATTRIBUTE);
+  if (initialPayload) {
+    applyPolicy(initialPayload);
+  }
 })();

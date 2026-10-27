@@ -1,16 +1,11 @@
 {
   "name": "enhanced-h264ify",
-  "version": "3.0.0",
+  "version": "3.2.0",
   "manifest_version": 3,
   "description": "__MSG_extensionDescription__",
   "homepage_url": "https://github.com/alextrv/enhanced-h264ify",
   "default_locale": "en",
-  "minimum_chrome_version": "147",
-  "browser_specific_settings": {
-    "gecko": {
-      "strict_min_version": "148.0"
-    }
-  },
+  "minimum_chrome_version": "111",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -25,6 +20,9 @@
     "default_title": "__MSG_optionsTitle__",
     "default_popup": "options.html"
   },
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -34,8 +32,7 @@
       ],
       "js": [
         "src/common/config.js",
-        "src/content/bridge.js",
-        "src/content/loudness.js"
+        "src/content/bridge.js"
       ],
       "run_at": "document_start",
       "all_frames": true
@@ -52,12 +49,43 @@
       "world": "MAIN",
       "run_at": "document_start",
       "all_frames": true
+    },
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtube-nocookie.com/*",
+        "*://*.youtu.be/*"
+      ],
+      "js": [
+        "src/content/player-control.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtube-nocookie.com/*",
+        "*://*.youtu.be/*"
+      ],
+      "js": [
+        "src/content/loudness.js",
+        "src/content/playback.js",
+        "src/content/dislikes.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
     }
   ],
   "options_ui": {
-    "page": "options.html"
+    "page": "options.html",
+    "open_in_tab": false
   },
   "permissions": [
     "storage"
+  ],
+  "host_permissions": [
+    "https://returnyoutubedislikeapi.com/*"
   ]
 }

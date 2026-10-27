@@ -1,61 +1,22 @@
 {
-  "extensionDescription": {
-    "message": "Choose what video and audio codecs YouTube should play for you",
-    "description": "Extension description"
-  },
-
-  "optionsTitle": {
-    "message": "Možnosti enhanced-h264ify"
-  },
-
-  "optionsBlock60fps": {
-    "message": "Blokovat 60fps videa"
-  },
-
-  "optionsBlockH264": {
-    "message": "Blokovat h264 (AVC)"
-  },
-
-  "optionsBlockVP8": {
-    "message": "Blokovat VP8"
-  },
-
-  "optionsBlockVP9": {
-    "message": "Blokovat VP9"
-  },
-
-  "optionsBlockAV1": {
-    "message": "Blokovat AV1"
-  },
-
-  "optionsBlockOpus": {
-    "message": "Blokovat Opus"
-  },
-
-  "optionsBlockMP4A": {
-    "message": "Blokovat AAC (MP4A)"
-  },
-
-  "optionsDisableLN": {
-    "message": "Zakázat normalizaci hlasitosti"
-  },
-
-  "optionsTitleVideo": {
-    "message": "Video"
-  },
-
-  "optionsTitleAudio": {
-    "message": "Zvuk"
-  },
-
-  "attributionUpstream": {
-    "message": "Založeno na h264ify od erkserkserks (2015) a enhanced-h264ify od alextrv (2019)",
-    "description": "Upstream authors, listed before the current maintainer"
-  },
-
-  "attribution": {
-    "message": "Upraveno a vylepšeno uživatelem LiebeBlack",
-    "description": "Credit line shown in the popup footer"
-  }
-
+  "extensionDescription": { "message": "Vyberte, které video a audio kodeky má YouTube přehrávat", "description": "Extension description" },
+  "optionsTitlePlayback": { "message": "Přehrávání" },
+  "optionsAutoMaxResolution": { "message": "Spouštět v maximálním rozlišení" },
+  "optionsAntiInactivity": { "message": "Přeskočit neaktivitu" },
+  "optionsBypassAgeGate": { "message": "Přeskočit upozornění na obsah a věk" },
+  "optionsTitleInterface": { "message": "Rozhraní" },
+  "optionsShowDislikes": { "message": "Zobrazovat „Nelíbí se mi“" },
+  "optionsTitle": { "message": "enhanced-h264ify" },
+  "optionsBlock60fps": { "message": "Blokovat 60fps" },
+  "optionsBlockH264": { "message": "Blokovat H.264 (AVC)" },
+  "optionsBlockVP8": { "message": "Blokovat VP8" },
+  "optionsBlockVP9": { "message": "Blokovat VP9" },
+  "optionsBlockAV1": { "message": "Blokovat AV1" },
+  "optionsBlockOpus": { "message": "Blokovat Opus" },
+  "optionsBlockMP4A": { "message": "Blokovat AAC (MP4A)" },
+  "optionsDisableLN": { "message": "Zakázat normalizaci zvuku" },
+  "optionsTitleVideo": { "message": "Video" },
+  "optionsTitleAudio": { "message": "Zvuk" },
+  "attributionUpstream": { "message": "enhanced-h264ify (erkserkserks, alextrv, LiebeBlack)", "description": "Upstream authors" },
+  "attribution": { "message": "enhanced-h264ify · LiebeBlack", "description": "Credit line shown in the popup footer" }
 }

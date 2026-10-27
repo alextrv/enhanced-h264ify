@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>enhanced-h264ify Test Suite (Zero-Node Static Runner)</title>
+  <link rel="stylesheet" href="../src/options/options.css">
+  <style>
+    body {
+      width: 800px;
+      max-width: 95vw;
+      margin: 20px auto;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .test-suite-header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .badge-pass { background: #137333; color: white; }
+    .badge-fail { background: #c5221f; color: white; }
+    .badge-running { background: #e37400; color: white; }
+    .test-result-item {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+    .test-result-item.pass { color: #137333; }
+    .test-result-item.fail { color: #c5221f; font-weight: bold; background: #fce8e6; }
+    .harness-fixture {
+      border: 1px dashed var(--border);
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    #results-summary {
+      font-size: 15px;
+      font-weight: 650;
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-suite-header">
+    <h1>enhanced-h264ify Test Suite (MV3 Vanilla)</h1>
+    <p>Ejecución nativa y estática 100% en navegador (Cero Node, Cero compilación).</p>
+    <div id="results-summary">
+      <span id="suite-badge" class="badge badge-running">EJECUTANDO TESTS...</span>
+      <span id="suite-stats">Iniciando entorno...</span>
+    </div>
+  </div>
+
+  <div id="test-list" class="card"></div>
+
+  <!-- Contenedor visual del fixture de la extensión -->
+  <div class="harness-fixture">
+    <h3>Fixture de UI de Opciones</h3>
+    <header>
+       <h1 data-i18n="optionsTitle">enhanced-h264ify</h1>
+    </header>
+    <main>
+       <section class="card">
+          <h2 data-i18n="optionsTitleVideo">Video</h2>
+          <ul id="group-video"></ul>
+       </section>
+       <section class="card">
+          <h2 data-i18n="optionsTitleAudio">Audio</h2>
+          <ul id="group-audio"></ul>
+       </section>
+       <section class="card">
+          <h2 data-i18n="optionsTitlePlayback">Playback</h2>
+          <ul id="group-playback"></ul>
+       </section>
+       <section class="card">
+          <h2 data-i18n="optionsTitleInterface">Interface</h2>
+          <ul id="group-interface"></ul>
+       </section>
+    </main>
+  </div>
+
+  <!-- Scripts en orden de ejecución -->
+  <script src="../.harness-mock.js"></script>
+  <script src="../src/common/config.js"></script>
+  <script src="../src/content/bridge.js"></script>
+  <script src="../src/content/codec-guard.js"></script>
+  <script src="../src/content/loudness.js"></script>
+  <script src="../src/content/playback.js"></script>
+  <script src="../src/content/player-control.js"></script>
+  <script src="../src/content/dislikes.js"></script>
+  <script src="../src/options/options.js"></script>
+  <script src="../.harness-tests.js"></script>
+
+  <script>
+    const renderTestResults = () => {
+      if (!globalThis.__DONE__) {
+        setTimeout(renderTestResults, 50);
+        return;
+      }
+      const results = globalThis.__RESULTS__ || [];
+      const listEl = document.getElementById('test-list');
+      const badgeEl = document.getElementById('suite-badge');
+      const statsEl = document.getElementById('suite-stats');
+
+      let passCount = 0;
+      let failCount = 0;
+
+      listEl.innerHTML = '';
+      for (const line of results) {
+        const [status, name, detail] = line.split(' | ');
+        const isPass = status === 'PASS';
+        if (isPass) passCount++; else failCount++;
+
+        const row = document.createElement('div');
+        row.className = `test-result-item ${isPass ? 'pass' : 'fail'}`;
+        row.innerHTML = `<span><strong>[${status}]</strong> ${name}</span><span>${detail || ''}</span>`;
+        listEl.appendChild(row);
+      }
+
+      if (failCount === 0) {
+        badgeEl.className = 'badge badge-pass';
+        badgeEl.textContent = 'TODOS LOS TESTS PASARON';
+      } else {
+        badgeEl.className = 'badge badge-fail';
+        badgeEl.textContent = `${failCount} TESTS FALLARON`;
+      }
+      statsEl.textContent = `${passCount} pasados, ${failCount} fallados, ${results.length} totales.`;
+    };
+    renderTestResults();
+  </script>
+</body>
+</html>
