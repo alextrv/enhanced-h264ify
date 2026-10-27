@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>enhanced-h264ify · True Hardware Acceleration for YouTube</title>
+  
+  <meta name="description" content="Aceleración por hardware para YouTube en navegadores Chromium. Reduce drásticamente uso de CPU, ahorra batería y elimina el lag con Manifest V3. Mantenido por LiebeBlack.">
+  <meta name="theme-color" content="#e34a3c">
+
+  <!-- OpenGraph / Social -->
+  <meta property="og:title" content="enhanced-h264ify · True Hardware Acceleration for YouTube">
+  <meta property="og:description" content="Fuerza códecs eficientes H.264/AAC, bloquea AV1/VP9, restaura dislikes y omite avisos en YouTube.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="icons/icon128.png">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon16.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/icon48.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="icons/icon128.png">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Navigation -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="#" class="brand">
+        <img src="icons/icon48.png" alt="enhanced-h264ify logo" class="brand-icon">
+        <span class="brand-title">enhanced-h264ify</span>
+        <span class="brand-badge">2026 Edition</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#features" data-i18n="navFeatures">Características</a></li>
+          <li><a href="#history" data-i18n="navHistory">Historia y Linaje</a></li>
+          <li><a href="#install" data-i18n="navInstall">Cómo Instalar</a></li>
+          <li><a href="#simulator" data-i18n="navSimulator">Simulador</a></li>
+          <li><a href="#faq" data-i18n="navFaq">Preguntas</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="lang-toggle" class="btn-icon-toggle" title="Switch language" aria-label="Toggle language">
+          🇺🇸 <b>EN</b>
+        </button>
+        <button id="theme-toggle" class="btn-icon-toggle" title="Toggle theme" aria-label="Toggle theme">
+          ☀️
+        </button>
+        <a href="https://github.com/LiebeBlack/enhanced-h264ify" target="_blank" rel="noopener noreferrer" class="btn-icon-toggle" title="GitHub Repository">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+        </a>
+        <a href="https://github.com/LiebeBlack/enhanced-h264ify/releases/latest/download/enhanced-h264ify.zip" class="btn-nav-download btn-download-action">
+          <span>⬇️</span>
+          <span data-i18n="navDownload">Descargar .ZIP</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-pill">
+        <span>✨</span>
+        <span data-i18n="heroBadge">Edición 2026 · Manifest V3 · Reescrito por LiebeBlack</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span data-i18n="heroTitle">Aceleración por Hardware real para YouTube</span>
+      </h1>
+
+      <p class="hero-subtitle" data-i18n="heroSubtitle">
+        Optimiza la reproducción de vídeo, reduce drásticamente el uso de CPU/GPU, ahorra batería y elimina los micro-tirones forzando códecs ligeros por hardware (H.264 y AAC) en lugar de formatos pesados (AV1, VP9).
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="https://github.com/LiebeBlack/enhanced-h264ify/releases/latest/download/enhanced-h264ify.zip" class="btn-primary-download btn-download-action">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span data-i18n="btnDownload">Descargar Extensión (.zip)</span>
+        </a>
+
+        <a href="#install" class="btn-secondary">
+          <span>🛠️</span>
+          <span data-i18n="btnInstallGuide">Guía de Instalación Paso a Paso</span>
+        </a>
+
+        <a href="https://github.com/LiebeBlack/enhanced-h264ify" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+          <span>🐙</span>
+          <span data-i18n="btnViewGithub">Ver Código Fuente</span>
+        </a>
+      </div>
+
+      <div class="hero-version-note">
+        <span data-i18n="heroVersionInfo">Versión v3.2.0 · Archivo ZIP listo para cargar en Chromium</span> · 
+        <span id="release-version-tag" class="hero-version-tag">v3.2.0</span>
+      </div>
+
+      <!-- Performance Metrics Cards -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value" data-i18n="metricCpuTitle">Hasta -70%</div>
+          <div class="metric-desc" data-i18n="metricCpuDesc">Menor carga en CPU al ver vídeos en 1080p y 4K</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" data-i18n="metricBatteryTitle">+35%</div>
+          <div class="metric-desc" data-i18n="metricBatteryDesc">Más autonomía de batería en laptops y portátiles</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" data-i18n="metricRamTitle">~6 KB</div>
+          <div class="metric-desc" data-i18n="metricRamDesc">Consumo de memoria con estricto caché LRU O(1)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value" data-i18n="metricReflowTitle">0 ms</div>
+          <div class="metric-desc" data-i18n="metricReflowDesc">Cero bloqueos de renderizado (sin layout thrashing)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lineage & History Section -->
+  <section id="history" class="section-wrapper">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="historyTitle">Linaje del Proyecto e Historia del Fork</h2>
+        <p class="section-subtitle" data-i18n="historySubtitle">
+          Desde el pionero h264ify en 2015 hasta la reescritura moderna total para Manifest V3 en 2026 por LiebeBlack.
+        </p>
+      </div>
+
+      <div class="timeline-container">
+        <!-- Stage 1 -->
+        <div class="timeline-card">
+          <span class="timeline-badge" data-i18n="stage1Badge">2015 · El Origen</span>
+          <h3 class="timeline-title" data-i18n="stage1Title">h264ify (erkserkserks)</h3>
+          <p class="timeline-desc" data-i18n="stage1Desc">
+            El proyecto pionero original. erkserkserks descubrió que interceptar canPlayType e isTypeSupported en el navegador obligaba a YouTube a servir flujos en H.264 (acelerados por hardware en tarjetas gráficas e integradas) en vez del costoso VP8/VP9 decodificado por CPU.
+          </p>
+          <ul class="timeline-bullets">
+            <li>Interceptación síncrona en HTMLMediaElement.</li>
+            <li>Enfoque exclusivo en forzar H.264 y AAC.</li>
+            <li>Salvó millones de computadoras antiguas de ralentizaciones.</li>
+          </ul>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="timeline-card">
+          <span class="timeline-badge" data-i18n="stage2Badge">2019 · El Fork Intermedio</span>
+          <h3 class="timeline-title" data-i18n="stage2Title">enhanced-h264ify (alextrv)</h3>
+          <p class="timeline-desc" data-i18n="stage2Desc">
+            Añadió mayor granularidad con interruptores individuales para bloquear AV1, Opus y limitar a 60 fps mediante una ventana emergente de opciones en Manifest V2.
+          </p>
+          <ul class="timeline-bullets">
+            <li>Soporte para bloquear códecs AV1 y Opus.</li>
+            <li>Limitador de 60 FPS con ventana emergente de opciones.</li>
+            <li>Arquitectura clásica basada en Manifest V2.</li>
+          </ul>
+        </div>
+
+        <!-- Stage 3 (Highlighted) -->
+        <div class="timeline-card highlight">
+          <span class="timeline-badge" data-i18n="stage3Badge">2026 · La Reescritura Completa</span>
+          <h3 class="timeline-title" data-i18n="stage3Title">enhanced-h264ify 2026 (LiebeBlack)</h3>
+          <p class="timeline-desc" data-i18n="stage3Desc">
+            Mantenedor actual. LiebeBlack tomó el proyecto y reescribió por completo el código para Manifest V3: eliminó librerías obsoletas y dependencias lentas, adaptó la extensión al nuevo DOM de YouTube con componentes Lit 2026, integró el contador de Dislikes, solucionó advertencias de contenido e inactividad, y optimizó el rendimiento con cero forced reflows y caché LRU O(1).
+          </p>
+          <ul class="timeline-bullets">
+            <li><strong>Reescritura total a Manifest V3</strong> con Service Worker reactivo.</li>
+            <li><strong>Compatibilidad DOM 2026</strong>: Web Components y elementos Lit de YouTube.</li>
+            <li><strong>Return YouTube Dislike</strong> integrado en botones segmentados.</li>
+            <li><strong>Bypass automático</strong> de pausas por inactividad y avisos de edad.</li>
+            <li><strong>Neutralización de volumen</strong> y compresión «Volumen Estable».</li>
+            <li><strong>Cero Layout Thrashing</strong> y huella de memoria minúscula (~6 KB RAM).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features Section -->
+  <section id="features" class="section-wrapper">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="featuresTitle">Características y Funciones Principales</h2>
+        <p class="section-subtitle" data-i18n="featuresSubtitle">
+          Diseñado para máximo rendimiento en hardware de bajos recursos sin perder fidelidad audiovisual.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feat 1 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">🎬</div>
+          <h3 class="feature-title" data-i18n="feat1Title">Bloqueo de AV1, VP9 y VP8</h3>
+          <p class="feature-desc" data-i18n="feat1Desc">
+            Obliga a YouTube a entregar vídeo codificado en AVC / H.264. Tu tarjeta gráfica o gráfica integrada decodifica el vídeo en hardware sin calentar tu ordenador.
+          </p>
+        </div>
+
+        <!-- Feat 2 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">🎧</div>
+          <h3 class="feature-title" data-i18n="feat2Title">Audio AAC de Bajo Consumo</h3>
+          <p class="feature-desc" data-i18n="feat2Desc">
+            Bloquea el códec de audio Opus para solicitar streams de audio AAC (MP4A), decodificados nativamente con mínimo impacto en batería.
+          </p>
+        </div>
+
+        <!-- Feat 3 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">⏱️</div>
+          <h3 class="feature-title" data-i18n="feat3Title">Límite Inteligente a 30 FPS</h3>
+          <p class="feature-desc" data-i18n="feat3Desc">
+            Descarta flujos de 60 fps para hardware modesto. Suspende inteligentemente el límite en transmisiones en directo (Live) para no degradar la resolución.
+          </p>
+        </div>
+
+        <!-- Feat 4 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">👎</div>
+          <h3 class="feature-title" data-i18n="feat4Title">Retorno de Dislikes (RYD)</h3>
+          <p class="feature-desc" data-i18n="feat4Desc">
+            Restaura la cantidad estimada de «No me gusta» en la barra de acciones de YouTube usando la API de Return YouTube Dislike integrada directamente en los botones Lit.
+          </p>
+        </div>
+
+        <!-- Feat 5 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">☕</div>
+          <h3 class="feature-title" data-i18n="feat5Title">Omitir Pausa por Inactividad</h3>
+          <p class="feature-desc" data-i18n="feat5Desc">
+            Confirma de forma automática el cartel de «¿El vídeo se ha pausado? ¿Deseas seguir viendo?» para que tus listas de reproducción no se interrumpan.
+          </p>
+        </div>
+
+        <!-- Feat 6 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">🛡️</div>
+          <h3 class="feature-title" data-i18n="feat6Title">Bypass de Avisos de Contenido y Edad</h3>
+          <p class="feature-desc" data-i18n="feat6Desc">
+            Acepta automáticamente advertencias como «Se recomienda discreción del espectador» en cualquier idioma mediante eventos sintéticos, sin bucles de recarga &rco=1.
+          </p>
+        </div>
+
+        <!-- Feat 7 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">🔊</div>
+          <h3 class="feature-title" data-i18n="feat7Title">Neutralizar Normalización y «Volumen Estable»</h3>
+          <p class="feature-desc" data-i18n="feat7Desc">
+            Anula la compresión dinámica agresiva de YouTube y la atenuación loudnessDb directamente en el reproductor para escuchar el audio tal como fue masterizado.
+          </p>
+        </div>
+
+        <!-- Feat 8 -->
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">💎</div>
+          <h3 class="feature-title" data-i18n="feat8Title">Máxima Calidad Automática</h3>
+          <p class="feature-desc" data-i18n="feat8Desc">
+            Fija el reproductor en la mayor resolución posible al iniciar (1080p Premium, 1440p o 4K) evitando que YouTube baje la calidad arbitrariamente.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step-by-Step Installation Guide -->
+  <section id="install" class="section-wrapper">
+    <div class="container install-container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="installTitle">Guía de Instalación: Cargar Desempaquetada sin Errores</h2>
+        <p class="section-subtitle" data-i18n="installSubtitle">
+          Instalación en menos de 1 minuto en cualquier navegador basado en Chromium (Chrome, Edge, Brave, Opera, Vivaldi).
+        </p>
+      </div>
+
+      <!-- Browser Tabs & Copy Bar -->
+      <div class="browser-selector-card">
+        <div class="browser-tabs" id="browser-tabs">
+          <button class="browser-tab active" data-browser="chrome">🌐 Google Chrome</button>
+          <button class="browser-tab" data-browser="edge">🌊 Microsoft Edge</button>
+          <button class="browser-tab" data-browser="brave">🦁 Brave Browser</button>
+          <button class="browser-tab" data-browser="opera">⭕ Opera / Opera GX</button>
+          <button class="browser-tab" data-browser="vivaldi">🔴 Vivaldi</button>
+        </div>
+
+        <div class="browser-url-bar">
+          <input type="text" id="browser-ext-url" class="browser-url-input" value="chrome://extensions" readonly>
+          <button id="copy-url-btn" class="btn-copy">
+            <span data-i18n="copyBtn">Copiar enlace</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step Cards -->
+      <div class="steps-list">
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-number" data-i18n="step1Num">1</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="step1Title">Descargar el archivo ZIP</h3>
+            <p class="step-desc" data-i18n="step1Desc">
+              Descarga la última versión empaquetada lista para usar.
+            </p>
+            <a href="https://github.com/LiebeBlack/enhanced-h264ify/releases/latest/download/enhanced-h264ify.zip" class="btn-primary-download btn-download-action" style="padding: 10px 20px; font-size: 0.95rem;">
+              <span>⬇️</span>
+              <span data-i18n="step1Btn">Descargar enhanced-h264ify.zip</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-number" data-i18n="step2Num">2</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="step2Title">Descomprimir en una carpeta permanente</h3>
+            <p class="step-desc" data-i18n="step2Desc">
+              Extrae el archivo .zip en una carpeta donde no vayas a borrarla accidentalmente (por ejemplo: Documentos o Documentos/GitHub). Debe contener manifest.json y las carpetas src, icons y _locales.
+            </p>
+            <div class="step-callout">
+              <span data-i18n="step2Tip">Importante: No elimines la carpeta después de instalar, ya que el navegador la lee directamente desde esa ubicación.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-number" data-i18n="step3Num">3</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="step3Title">Abrir la página de extensiones</h3>
+            <p class="step-desc" data-i18n="step3Desc">
+              Escribe o copia la dirección en la barra de navegación de tu navegador (ej: chrome://extensions, edge://extensions, etc.).
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+          <div class="step-number" data-i18n="step4Num">4</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="step4Title">Activar el «Modo de desarrollador»</h3>
+            <p class="step-desc" data-i18n="step4Desc">
+              En la esquina superior derecha de la página de extensiones, enciende el interruptor que dice «Modo de desarrollador» (o «Developer mode»).
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-card">
+          <div class="step-number" data-i18n="step5Num">5</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="step5Title">Hacer clic en «Cargar descomprimida»</h3>
+            <p class="step-desc" data-i18n="step5Desc">
+              Haz clic en el botón «Cargar descomprimida» (Load unpacked) arriba a la izquierda y selecciona la carpeta donde extrajiste la extensión (la que contiene manifest.json).
+            </p>
+            <div class="step-callout warning">
+              <span data-i18n="step5ErrorHelp">Solución de error común: Si recibes el error «Manifest file is missing», asegúrate de seleccionar la carpeta raíz que contiene directamente a manifest.json y no una subcarpeta vacía.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step-card">
+          <div class="step-number" data-i18n="step6Num">6</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="step6Title">¡Listo! Fija el icono y disfruta</h3>
+            <p class="step-desc" data-i18n="step6Desc">
+              Aparecerá el icono rojo de enhanced-h264ify en la barra de herramientas de tu navegador. Haz clic en él para abrir la ventana de opciones y configurar tus preferencias.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Popup Simulator Section -->
+  <section id="simulator" class="section-wrapper">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="simTitle">Simulador Interactivo de Opciones</h2>
+        <p class="section-subtitle" data-i18n="simSubtitle">
+          Prueba la interfaz real de la extensión aquí mismo. Activa o desactiva interruptores para ver qué efecto tienen en YouTube.
+        </p>
+      </div>
+
+      <div class="simulator-layout">
+        <!-- Mockup Window -->
+        <div class="mockup-window">
+          <div class="mockup-header">
+            <div class="mockup-dots">
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+            </div>
+            <div class="mockup-title">enhanced-h264ify</div>
+          </div>
+
+          <div class="mockup-body">
+            <!-- Group Video -->
+            <section class="sim-card">
+              <h2 data-i18n="simCategoryVideo">Vídeo</h2>
+              <ul id="sim-group-video"></ul>
+            </section>
+
+            <!-- Group Audio -->
+            <section class="sim-card">
+              <h2 data-i18n="simCategoryAudio">Audio</h2>
+              <ul id="sim-group-audio"></ul>
+            </section>
+
+            <!-- Group Playback -->
+            <section class="sim-card">
+              <h2 data-i18n="simCategoryPlayback">Reproducción</h2>
+              <ul id="sim-group-playback"></ul>
+            </section>
+
+            <!-- Group Interface -->
+            <section class="sim-card">
+              <h2 data-i18n="simCategoryInterface">Interfaz</h2>
+              <ul id="sim-group-interface"></ul>
+            </section>
+          </div>
+
+          <div class="mockup-footer">
+            <span data-i18n="simFooterAttribution">enhanced-h264ify · LiebeBlack</span>
+          </div>
+        </div>
+
+        <!-- Feedback Pane -->
+        <div class="sim-info-pane">
+          <div class="feedback-card" id="sim-feedback-box">
+            <div class="feedback-badge">💡 Tip Interactivo</div>
+            <div class="feedback-title">Haz clic en los interruptores del simulador</div>
+            <p class="feedback-desc">
+              Cada interruptor controla un aspecto crucial de la decodificación en YouTube. Al hacer clic en un switch verás una explicación detallada de su comportamiento y rendimiento en tiempo real.
+            </p>
+          </div>
+
+          <div class="feedback-card" style="background: var(--bg-secondary);">
+            <div class="feedback-title" style="font-size: 1.1rem;">⚡ Configuración Óptima Recomendada</div>
+            <p class="feedback-desc" style="font-size: 0.95rem;">
+              Para equipos modestos o laptops con batería limitada: Mantén activado <strong>Bloquear AV1</strong>, <strong>Bloquear VP9</strong> y <strong>Bloquear Opus</strong>. Esto garantiza 100% decodificación por hardware de vídeo H.264 y audio AAC.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="section-wrapper">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="faqTitle">Preguntas Frecuentes (FAQ)</h2>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-card">
+          <h3 class="faq-question" data-i18n="faq1Q">¿Por qué YouTube hace que mi computadora se caliente o consuma mucha batería?</h3>
+          <p class="faq-answer" data-i18n="faq1A">
+            Por defecto, YouTube prioriza códecs como AV1 y VP9. En equipos sin tarjetas gráficas modernas con soporte de hardware dedicado para AV1, el procesador (CPU) debe decodificar cada cuadro por software, lo que genera 80-100% de uso de CPU, ventiladores al máximo y drenaje rápido de la batería.
+          </p>
+        </div>
+
+        <div class="faq-card">
+          <h3 class="faq-question" data-i18n="faq2Q">¿Por qué instalar la extensión en modo desempaquetado?</h3>
+          <p class="faq-answer" data-i18n="faq2A">
+            El modo desempaquetado te brinda acceso directo al código fuente más reciente mantenido por LiebeBlack con Manifest V3, sin telemetría, sin tiempos de espera por revisiones de tiendas de extensiones y con la garantía total de transparencia y privacidad.
+          </p>
+        </div>
+
+        <div class="faq-card">
+          <h3 class="faq-question" data-i18n="faq3Q">¿Cómo se actualiza la extensión cuando haya una nueva versión?</h3>
+          <p class="faq-answer" data-i18n="faq3A">
+            Solo tienes que descargar el nuevo .zip desde la sección de Releases, extraer los archivos reemplazando los antiguos en la misma carpeta, y presionar el icono de recargar (🔄) en chrome://extensions. ¡Toda tu configuración se mantendrá intacta!
+          </p>
+        </div>
+
+        <div class="faq-card">
+          <h3 class="faq-question" data-i18n="faq4Q">¿Es compatible con YouTube Shorts, emisiones en directo y vídeos insertados?</h3>
+          <p class="faq-answer" data-i18n="faq4A">
+            Sí. Esta versión 2026 de LiebeBlack incluye soporte nativo y reglas especiales para Shorts, Lives (donde desactiva inteligentemente el tope de 30fps para no bajar resolución) y reproductores embebidos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand-pane">
+          <a href="#" class="brand">
+            <img src="icons/icon48.png" alt="logo" class="brand-icon">
+            <span class="brand-title">enhanced-h264ify</span>
+          </a>
+          <p class="footer-desc" data-i18n="footerDesc">
+            Optimización de decodificación por hardware para YouTube. Reescritura moderna para Manifest V3 por LiebeBlack.
+          </p>
+          <div class="footer-lineage" data-i18n="footerLineage">
+            Linaje: LiebeBlack (2026) · alextrv (2019) · erkserkserks (2015)
+          </div>
+        </div>
+
+        <div class="footer-links-pane">
+          <div class="footer-col">
+            <h4>Navegación</h4>
+            <ul>
+              <li><a href="#features" data-i18n="navFeatures">Características</a></li>
+              <li><a href="#history" data-i18n="navHistory">Historia y Linaje</a></li>
+              <li><a href="#install" data-i18n="navInstall">Cómo Instalar</a></li>
+              <li><a href="#simulator" data-i18n="navSimulator">Simulador</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>GitHub</h4>
+            <ul>
+              <li><a href="https://github.com/LiebeBlack/enhanced-h264ify" target="_blank" rel="noopener noreferrer">Repositorio</a></li>
+              <li><a href="https://github.com/LiebeBlack/enhanced-h264ify/releases" target="_blank" rel="noopener noreferrer">Releases (.zip)</a></li>
+              <li><a href="https://github.com/LiebeBlack/enhanced-h264ify/issues" target="_blank" rel="noopener noreferrer">Reportar Problema</a></li>
+              <li><a href="https://github.com/LiebeBlack/enhanced-h264ify/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">Licencia MIT</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          © 2026 LiebeBlack. <span data-i18n="footerLicense">Licencia de código abierto MIT.</span>
+        </div>
+        <button id="scroll-top-btn" class="btn-scroll-top" data-i18n="footerScrollTop">
+          Subir al inicio ↑
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

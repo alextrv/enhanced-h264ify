@@ -1,10 +1,14 @@
 # enhanced-h264ify (2026 Production Fork)
 
+[![Web & Docs](https://img.shields.io/badge/Web%20Docs-GitHub%20Pages-brightgreen?style=flat-square)](https://liebeblack.github.io/enhanced-h264ify/)
+[![Download .ZIP](https://img.shields.io/badge/Download-.ZIP%20Release-blue?style=flat-square&logo=github)](https://github.com/LiebeBlack/enhanced-h264ify/releases/latest/download/enhanced-h264ify.zip)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-success?style=flat-square)](manifest.json)
 [![Platform](https://img.shields.io/badge/Platform-Chromium%20111+-blue?style=flat-square)](#requirements)
 [![License](https://img.shields.io/badge/License-MIT-orange?style=flat-square)](LICENSE)
 [![Target](https://img.shields.io/badge/Focus-Pure%20YouTube-red?style=flat-square)](#how-it-works)
 
+> 🌐 **Sitio Web Oficial & Documentación Interactiva:** [https://liebeblack.github.io/enhanced-h264ify/](https://liebeblack.github.io/enhanced-h264ify/)
+>
 > **FORK LINEAGE / HISTORIAL DE VERSIONES:**
 >
 > 1. **h264ify** (Original, 2015) — Desarrollado por [erkserkserks](https://github.com/erkserkserks). Bloqueo pionero de VP8/VP9 para forzar decodificación por hardware de H.264.
@@ -104,15 +108,25 @@ enhanced-h264ify/
 - **Google Chrome / Chromium / Brave / Edge / Opera 111+**
 - Permisos mínimos requeridos: `storage` (para guardar tus preferencias) y `https://returnyoutubedislikeapi.com/*` (para consultar los dislikes si se activa la opción).
 
-### Instalación en modo desarrollador
-1. Descarga o clona este repositorio en tu ordenador:
+### Instalación en modo desarrollado (Cargar descomprimida)
+
+**Método A (Recomendado — Descarga directa del .ZIP):**
+1. Descarga el paquete pre-compilado listo para usar: [**`enhanced-h264ify.zip`**](https://github.com/LiebeBlack/enhanced-h264ify/releases/latest/download/enhanced-h264ify.zip).
+2. Extrae el contenido en una carpeta permanente (ej. `Documentos/enhanced-h264ify`).
+3. Abre tu navegador Chromium y navega a `chrome://extensions/` (o `edge://extensions`, `brave://extensions`).
+4. Activa el interruptor **Modo de desarrollador** (Developer mode) en la esquina superior derecha.
+5. Haz clic en el botón **Cargar descomprimida** (Load unpacked) y selecciona la carpeta extraída que contiene `manifest.json`.
+
+**Método B (Clonación con Git):**
+1. Clona este repositorio en tu ordenador:
    ```bash
    git clone https://github.com/LiebeBlack/enhanced-h264ify.git
    ```
-2. Abre tu navegador Chromium y navega a `chrome://extensions/`.
-3. Activa el interruptor **Modo de desarrollador** (Developer mode) en la esquina superior derecha.
-4. Haz clic en **Cargar descomprimida** (Load unpacked) y selecciona la carpeta del proyecto.
-5. Abre cualquier vídeo en [YouTube](https://www.youtube.com) y configura tus opciones desde el icono de la extensión.
+2. Sigue los pasos 3 al 5 del Método A seleccionando la carpeta clonada.
+
+Abre cualquier vídeo en [YouTube](https://www.youtube.com) y configura tus opciones desde el icono de la extensión.
+
+Consulta la guía visual interactiva en la web: [https://liebeblack.github.io/enhanced-h264ify/#install](https://liebeblack.github.io/enhanced-h264ify/#install).
 
 ---
 

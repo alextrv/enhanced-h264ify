@@ -3,7 +3,7 @@
   "version": "3.2.0",
   "manifest_version": 3,
   "description": "__MSG_extensionDescription__",
-  "homepage_url": "https://github.com/alextrv/enhanced-h264ify",
+  "homepage_url": "https://liebeblack.github.io/enhanced-h264ify/",
   "default_locale": "en",
   "minimum_chrome_version": "111",
   "icons": {

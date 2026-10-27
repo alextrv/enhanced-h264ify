@@ -1,0 +1,78 @@
+name: Build and Publish Extension Release
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'manifest.json'
+      - 'options.html'
+      - 'src/**'
+      - 'icons/**'
+      - '_locales/**'
+      - 'LICENSE'
+      - 'README.md'
+      - '.github/workflows/release.yml'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract Extension Version
+        id: get_version
+        run: |
+          VERSION=$(node -e "console.log(require('./manifest.json').version)")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Extension version is $VERSION"
+
+      - name: Create Production Extension Zip
+        run: |
+          mkdir -p dist
+          # Package only production runtime extension files
+          zip -r dist/enhanced-h264ify.zip \
+            manifest.json \
+            options.html \
+            LICENSE \
+            README.md \
+            src/ \
+            icons/ \
+            _locales/ \
+            -x "*.DS_Store*" "*Thumbs.db*"
+
+          echo "Zip package created successfully:"
+          ls -lh dist/enhanced-h264ify.zip
+
+      - name: Publish or Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/enhanced-h264ify.zip
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', steps.get_version.outputs.VERSION) }}
+          name: ${{ format('enhanced-h264ify v{0}', steps.get_version.outputs.VERSION) }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ### 🚀 enhanced-h264ify Release (v${{ steps.get_version.outputs.VERSION }})
+            
+            **Descarga e Instalación Rápida:**
+            1. Descarga el archivo [`enhanced-h264ify.zip`](https://github.com/${{ github.repository }}/releases/latest/download/enhanced-h264ify.zip).
+            2. Descomprímelo en una carpeta permanente en tu equipo.
+            3. Abre `chrome://extensions` (o `edge://extensions`, `brave://extensions`) y activa el **Modo de desarrollador**.
+            4. Haz clic en **Cargar descomprimida** y selecciona la carpeta extraída.
+            
+            ---
+            *Compilación automática generada por GitHub Actions.*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
