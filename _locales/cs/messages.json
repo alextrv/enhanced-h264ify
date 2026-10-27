@@ -46,6 +46,16 @@
 
   "optionsTitleAudio": {
     "message": "Zvuk"
+  },
+
+  "attributionUpstream": {
+    "message": "Založeno na h264ify od erkserkserks (2015) a enhanced-h264ify od alextrv (2019)",
+    "description": "Upstream authors, listed before the current maintainer"
+  },
+
+  "attribution": {
+    "message": "Upraveno a vylepšeno uživatelem LiebeBlack",
+    "description": "Credit line shown in the popup footer"
   }
 
 }
