@@ -46,6 +46,16 @@
 
   "optionsTitleAudio": {
     "message": "Аудио"
+  },
+
+  "attributionUpstream": {
+    "message": "На основе h264ify от erkserkserks (2015) и enhanced-h264ify от alextrv (2019)",
+    "description": "Upstream authors, listed before the current maintainer"
+  },
+
+  "attribution": {
+    "message": "Изменено и улучшено: LiebeBlack",
+    "description": "Credit line shown in the popup footer"
   }
 
 }

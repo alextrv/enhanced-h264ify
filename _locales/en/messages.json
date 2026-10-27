@@ -46,5 +46,15 @@
 
   "optionsTitleAudio": {
     "message": "Audio"
+  },
+
+  "attributionUpstream": {
+    "message": "Based on h264ify by erkserkserks (2015) and enhanced-h264ify by alextrv (2019)",
+    "description": "Upstream authors, listed before the current maintainer"
+  },
+
+  "attribution": {
+    "message": "Modified and improved by LiebeBlack",
+    "description": "Credit line shown in the popup footer"
   }
 }

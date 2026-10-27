@@ -1,0 +1,60 @@
+{
+  "extensionDescription": {
+    "message": "Elige qué códecs de vídeo y audio debe reproducir YouTube",
+    "description": "Extension description"
+  },
+
+  "optionsTitle": {
+    "message": "enhanced-h264ify"
+  },
+
+  "optionsBlock60fps": {
+    "message": "Bloquear vídeo de 60 fps"
+  },
+
+  "optionsBlockH264": {
+    "message": "Bloquear h264 (AVC)"
+  },
+
+  "optionsBlockVP8": {
+    "message": "Bloquear VP8"
+  },
+
+  "optionsBlockVP9": {
+    "message": "Bloquear VP9"
+  },
+
+  "optionsBlockAV1": {
+    "message": "Bloquear AV1"
+  },
+
+  "optionsBlockOpus": {
+    "message": "Bloquear Opus"
+  },
+
+  "optionsBlockMP4A": {
+    "message": "Bloquear AAC (MP4A)"
+  },
+
+  "optionsDisableLN": {
+    "message": "Desactivar la normalización de volumen"
+  },
+
+  "optionsTitleVideo": {
+    "message": "Vídeo"
+  },
+
+  "optionsTitleAudio": {
+    "message": "Audio"
+  },
+
+  "attributionUpstream": {
+    "message": "Basado en h264ify de erkserkserks (2015) y enhanced-h264ify de alextrv (2019)",
+    "description": "Upstream authors, listed before the current maintainer"
+  },
+
+  "attribution": {
+    "message": "Modificado y mejorado por LiebeBlack",
+    "description": "Credit line shown in the popup footer"
+  }
+}
